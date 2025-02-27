@@ -19,11 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const links = [
-  {
-    id: "home",
-    path: "/",
-    name: "Home",
-  },
+ 
   {
     id: "shop",
     path: "/shop",

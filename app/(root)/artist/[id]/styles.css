@@ -1,0 +1,18 @@
+.zoom-container {
+  overflow: hidden;
+}
+
+.zoom-image {
+  animation: slow-zoom 20s ease-in-out infinite alternate;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+@keyframes slow-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+} 

@@ -6,26 +6,54 @@ import Link from "next/link";
 import { NavDropdownProps, SubLinkProps } from "@/ui/navbar/definition";
 import { DropdownIcon } from "@/ui/assets/svg";
 
-export default function NavDropdown({ link }: { link: NavDropdownProps }) {
-  const [dropdown, setDropdown] = useState<boolean>(false);
+const NavDropdown = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const links = [
+    { name: 'About', href: '/about' },
+    { name: 'Artists', href: '/artist' },
+  ];
 
   return (
-    <div
-      onMouseOver={() => setDropdown(true)}
-      onMouseLeave={() => setDropdown(false)}
-      className="relative"
-    >
-      <button className="flex items-center gap-0.5">
-        {link.name} <DropdownIcon className="h-[18px] w-[18px]" />
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="p-2 hover:bg-gray-100 rounded-md"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+          />
+        </svg>
       </button>
-      {dropdown && (
-        <div className="absolute left-0 top-full pt-4">
-          <DropdownSubLinks subLinks={link.subLinks} />
+
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
+          {links.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              onClick={() => setIsOpen(false)}
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
       )}
     </div>
   );
-}
+};
+
+export default NavDropdown;
 
 function DropdownSubLinks({ subLinks }: { subLinks?: SubLinkProps[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

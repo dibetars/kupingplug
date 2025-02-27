@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 
-import PageLayout from "@/layouts/pageLayout";
+import Navbar from "@/components/ui/navbar";
+import Footer from "@/components/ui/footer";
 
 export const metadata: Metadata = {
-  title: "Kupingplug - Sumpel kuping untuk anda dan keluarga",
-  description: "Kupingplug - Sumpel kuping untuk anda dan keluarga",
+  title: "ID RCRDS",
+  description: "ID RCRDS",
 };
 
 export default function RootLayout({
@@ -12,5 +13,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <PageLayout root={true}>{children}</PageLayout>;
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className="flex-1">
+        {children}
+      </main>
+      <Footer />
+    </div>
+  );
 }

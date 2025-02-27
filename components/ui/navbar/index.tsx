@@ -2,19 +2,16 @@
 
 // package
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 // ui
-import Logo from "@/ui/assets/logo";
 import {
-  CartIcon,
   HamburgerMenu,
-  NotificationCount,
-  SearchIcon,
-  UserIcon,
 } from "@/ui/assets/svg";
 import NavLinks from "@/ui/navbar/navLinks";
 import NavMobile from "@/ui/navbar/navMobile";
-import PromoSection from "@/ui/promo";
+import NavDropdown from "./navDropdown";
 
 // hooks
 import { useRootContext } from "@/hooks/rootContext";
@@ -22,9 +19,7 @@ import { useRootContext } from "@/hooks/rootContext";
 // lib
 import { cn } from "@/lib/utils";
 
-interface NavbarProps {}
-
-const Navbar: React.FC<NavbarProps> = () => {
+const Navbar = () => {
   const isRootPage = useRootContext();
   const [open, setOpen] = useState<boolean>(false);
   const [scroll, setScroll] = useState<boolean>(false);
@@ -35,48 +30,45 @@ const Navbar: React.FC<NavbarProps> = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleOnScroll);
-
     return () => window.removeEventListener("scroll", handleOnScroll);
   }, []);
 
   return (
-    <>
-      {!open && <PromoSection />}
-      <div
-        className={cn(
-          "sticky top-0 z-[100]",
-          isRootPage ? "bg-[#ffc95c]" : "bg-white",
-          scroll && "bg-white shadow transition-colors duration-200 ease-in",
-        )}
-      >
-        <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-8 py-4 lg:justify-normal">
-          <div className="flex items-center gap-1 lg:basis-1/4">
-            <button className="lg:hidden" onClick={() => setOpen(true)}>
-              <HamburgerMenu className="w-6" />
-            </button>
-
-            <Logo />
+    <div
+      className={cn(
+        "sticky top-0 z-[100]",
+        isRootPage ? "bg-[#ffc95c]" : "bg-white",
+        scroll && "bg-white shadow transition-colors duration-200 ease-in",
+      )}
+    >
+      <nav className="container mx-auto flex items-center justify-between px-4 py-4">
+        <div className="flex items-center gap-4">
+          <div className="lg:hidden">
+            <NavDropdown />
           </div>
-
-          <div className="hidden basis-2/4 lg:block">
-            <NavLinks />
-          </div>
-
-          <div className="flex items-center gap-1 lg:basis-1/4 lg:justify-end lg:gap-4">
-            <SearchIcon className="hidden lg:block" />
-            <UserIcon className="hidden lg:block" />
-            <CartIcon className="w-6" />
-            <NotificationCount
-              count={2}
-              className={cn(isRootPage ? "text-[#FFAB00]" : "text-white")}
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/IDSolo.jpg"
+              alt="ID RCRDS Logo"
+              width={50}
+              height={50}
+              className="object-contain"
             />
-          </div>
+          </Link>
+        </div>
 
-          {/* mobile navbar  */}
-          <NavMobile open={open} onClick={() => setOpen(false)} />
-        </nav>
-      </div>
-    </>
+        <div className="hidden lg:flex flex-1 justify-center">
+          <NavLinks />
+        </div>
+
+        <div className="w-[50px] lg:w-auto">
+          {/* Spacer div to maintain centering */}
+        </div>
+
+        {/* mobile navbar */}
+        <NavMobile open={open} onClick={() => setOpen(false)} />
+      </nav>
+    </div>
   );
 };
 

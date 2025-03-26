@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface ArtistLink {
   Name: string;
@@ -62,10 +63,11 @@ export default async function ArtistsPage() {
                 className="group relative overflow-hidden rounded-lg bg-white shadow-lg transform transition-transform duration-300 hover:-translate-y-2"
               >
                 <div className="relative h-64">
-                  <img
+                  <Image
                     src={artist.Photo?.url || '/placeholder-artist.jpg'}
                     alt={artist.ArtistName || 'Artist'}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <h2 className="absolute bottom-4 left-4 text-2xl font-semibold text-white">

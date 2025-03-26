@@ -57,7 +57,7 @@ export default async function AboutPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-8">Our Mission</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-8">
-              ID RCRDS is more than just a record label – we're a community of visionaries, 
+              ID RCRDS is more than just a record label &ndash; we&apos;re a community of visionaries, 
               innovators, and passionate music creators. Our mission is to push the boundaries 
               of electronic music while nurturing the next generation of artistic talent.
             </p>

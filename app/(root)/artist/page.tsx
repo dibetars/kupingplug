@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { generateSlug } from '@/lib/utils';
 
 interface ArtistLink {
   Name: string;
@@ -58,7 +59,7 @@ export default async function ArtistsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {artists.map((artist) => (
               <Link 
-                href={`/artist/${artist.id}`}
+                href={`/artist/${generateSlug(artist.ArtistName)}`}
                 key={artist.id}
                 className="group relative overflow-hidden rounded-lg bg-white shadow-lg transform transition-transform duration-300 hover:-translate-y-2"
               >

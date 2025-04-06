@@ -107,17 +107,17 @@ export default async function ArtistDetailPage({
           <div className="container mx-auto max-w-7xl">
             <div className="flex justify-between items-end">
               <div>
-                <h1 className="text-5xl font-bold mb-4">{artist.ArtistName}</h1>
+                <h1 className="text-5xl font-bold mb-6">{artist.ArtistName}</h1>
                 {artist.links && artist.links.length > 0 && (
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-4">
                     {artist.links.map((link, index) => (
                       <a
                         key={index}
                         href={link.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full 
-                                 transition-all duration-300 flex items-center gap-2 font-medium"
+                        className="bg-white/20 hover:bg-white/30 text-white px-5 py-2.5 rounded-full 
+                                 transition-all duration-300 flex items-center gap-2 font-medium text-sm"
                       >
                         {link.Name}
                       </a>

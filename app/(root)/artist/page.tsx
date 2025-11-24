@@ -1,7 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
+import { InstagramIcon, FacebookIcon, YoutubeIcon, SpotifyIcon, AppleMusicIcon } from '@/components/ui/assets/svg';
 import Image from 'next/image';
 import { generateSlug } from '@/lib/utils';
+import fs from 'fs/promises';
+import path from 'path';
 
 interface ArtistLink {
   Name: string;
@@ -23,18 +26,11 @@ interface Artist {
 
 async function getArtists(): Promise<Artist[]> {
   try {
-    const res = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:TF3YOouP/idrcrds', {
-      next: { revalidate: 3600 } // Revalidate every hour
-    });
-    
-    if (!res.ok) {
-      throw new Error('Failed to fetch artists');
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error('Error fetching artists:', error);
-    return []; // Return empty array on error
+    const filePath = path.join(process.cwd(), 'data', 'idrcrds.json');
+    const data = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch {
+    return [];
   }
 }
 
@@ -68,7 +64,7 @@ export default async function ArtistsPage() {
                     src={artist.Photo?.url || '/placeholder-artist.jpg'}
                     alt={artist.ArtistName || 'Artist'}
                     fill
-                    className="object-cover"
+                    className="object-cover object-center"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <h2 className="absolute bottom-4 left-4 text-2xl font-semibold text-white">
@@ -83,19 +79,29 @@ export default async function ArtistsPage() {
                         Connect with {artist.ArtistName}
                       </h3>
                       <div className="flex flex-wrap gap-3">
-                        {artist.links.map((link, index) => (
-                          link && link.link && (
+                        {artist.links.map((link, index) => {
+                          if (!link || !link.link) return null;
+                          const n = (link.Name || '').toLowerCase();
+                          let Icon = InstagramIcon as React.FC<any>;
+                          if (n.includes('spotify')) Icon = SpotifyIcon;
+                          else if (n.includes('apple')) Icon = AppleMusicIcon;
+                          else if (n.includes('youtube')) Icon = YoutubeIcon;
+                          else if (n.includes('facebook')) Icon = FacebookIcon;
+                          else if (n.includes('instagram')) Icon = InstagramIcon;
+                          return (
                             <a
                               key={index}
                               href={link.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center px-4 py-2 bg-primary/90 text-white rounded-full text-sm font-medium hover:bg-primary transition-colors duration-200"
+                              aria-label={link.Name || 'Link'}
+                              title={link.Name || 'Link'}
+                              className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                             >
-                              {link.Name || 'Visit'}
+                              <Icon className="h-5 w-5" />
                             </a>
-                          )
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -107,4 +113,4 @@ export default async function ArtistsPage() {
       </div>
     </div>
   );
-} 
+}

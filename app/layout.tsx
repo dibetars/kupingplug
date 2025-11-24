@@ -11,8 +11,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Your Site Name",
-  description: "Your site description",
+  title: "ID RCRDS",
+  description: "ID RCRDS World",
 };
 
 export default function RootLayout({

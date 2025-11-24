@@ -1,52 +1,56 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import React from 'react';
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const router = useRouter();
 
-  const handleLogout = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Remove the session cookie
-    document.cookie = 'sessionToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  const links = [
+    { name: 'Dashboard', href: '/admin' },
+    { name: 'Artists', href: '/admin/artists' },
+    { name: 'Services', href: '/admin/services' },
+    { name: 'Content', href: '/admin/content' },
+    { name: 'Gallery', href: '/admin/gallery' },
+  ];
+
+  const logout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/admin/login');
   };
 
+  if (pathname === '/admin/login') return <>{children}</>;
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Admin Header */}
-      <header className="bg-white shadow">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/admin/artists" className="text-xl font-bold text-gray-900">
-              ID RCRDS Admin
-            </Link>
-            <div className="flex items-center gap-4">
+    <div className="min-h-full">
+      <header className="bg-white border-b">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <Link href="/admin" className="text-lg font-semibold">Admin</Link>
+          <nav className="flex items-center gap-6">
+            {links.map((l) => (
               <Link
-                href="/"
-                className="text-gray-600 hover:text-gray-900"
+                key={l.name}
+                href={l.href}
+                className={pathname.startsWith(l.href) ? 'text-sm text-black font-semibold' : 'text-sm text-gray-700 hover:text-black'}
               >
-                View Site
+                {l.name}
               </Link>
-              <button
-                onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
+            ))}
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#ffc95c] hover:bg-[#ffc95c]/90 text-black px-3 py-1 rounded-md text-sm"
+            >
+              View Site
+            </a>
+            <button onClick={logout} className="text-sm text-gray-700 hover:text-black">Logout</button>
+          </nav>
         </div>
       </header>
-
-      {/* Main Content */}
       <main>{children}</main>
     </div>
   );
-} 
+}

@@ -3,7 +3,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { generateSlug } from '@/lib/utils';
-import './styles.css'; // We'll create this file next
+import './styles.css';
+import fs from 'fs/promises';
+import path from 'path';
+import { InstagramIcon, FacebookIcon, YoutubeIcon, SpotifyIcon, AppleMusicIcon } from '@/components/ui/assets/svg';
 
 interface ArtistLink {
   Name: string;
@@ -39,18 +42,11 @@ interface Artist {
 
 async function getArtistBySlug(slug: string): Promise<Artist | null> {
   try {
-    const res = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:TF3YOouP/idrcrds', {
-      next: { revalidate: 3600 }
-    });
-    
-    if (!res.ok) {
-      throw new Error('Failed to fetch artists');
-    }
-
-    const artists = await res.json();
-    return artists.find((artist: Artist) => generateSlug(artist.ArtistName) === slug) || null;
-  } catch (error) {
-    console.error('Error fetching artist:', error);
+    const filePath = path.join(process.cwd(), 'data', 'idrcrds.json');
+    const data = await fs.readFile(filePath, 'utf8');
+    const artists: Artist[] = JSON.parse(data);
+    return artists.find((artist) => generateSlug(artist.ArtistName) === slug) || null;
+  } catch {
     return null;
   }
 }
@@ -98,7 +94,7 @@ export default async function ArtistDetailPage({
             src={artist.Photo?.url || '/placeholder-artist.jpg'}
             alt={artist.ArtistName}
             fill
-            className="object-cover zoom-image"
+            className="object-cover object-center zoom-image"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
@@ -109,19 +105,30 @@ export default async function ArtistDetailPage({
               <div>
                 <h1 className="text-5xl font-bold mb-6">{artist.ArtistName}</h1>
                 {artist.links && artist.links.length > 0 && (
-                  <div className="flex flex-wrap gap-4">
-                    {artist.links.map((link, index) => (
-                      <a
-                        key={index}
-                        href={link.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-white/20 hover:bg-white/30 text-white px-5 py-2.5 rounded-full 
-                                 transition-all duration-300 flex items-center gap-2 font-medium text-sm"
-                      >
-                        {link.Name}
-                      </a>
-                    ))}
+                  <div className="flex flex-wrap gap-3">
+                    {artist.links.map((link, index) => {
+                      if (!link || !link.link) return null;
+                      const n = (link.Name || '').toLowerCase();
+                      let Icon = InstagramIcon as React.FC<any>;
+                      if (n.includes('spotify')) Icon = SpotifyIcon;
+                      else if (n.includes('apple')) Icon = AppleMusicIcon;
+                      else if (n.includes('youtube')) Icon = YoutubeIcon;
+                      else if (n.includes('facebook')) Icon = FacebookIcon;
+                      else if (n.includes('instagram')) Icon = InstagramIcon;
+                      return (
+                        <a
+                          key={index}
+                          href={link.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={link.Name || 'Link'}
+                          title={link.Name || 'Link'}
+                          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                        >
+                          <Icon className="h-5 w-5" fill="#ffffff" stroke="#ffffff" />
+                        </a>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -174,4 +181,4 @@ export default async function ArtistDetailPage({
       )}
     </div>
   );
-} 
+}

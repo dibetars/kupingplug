@@ -494,3 +494,37 @@ export const YoutubeIcon: React.FC<SVGComponentProps> = ({
     </svg>
   );
 };
+
+export const SpotifyIcon: React.FC<SVGComponentProps> = ({ stroke, fill, className }) => {
+  return (
+    <svg
+      className={cn(className)}
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="12" cy="12" r="10" stroke={cn(stroke ? stroke : "#141718")} strokeWidth="1.5" />
+      <path d="M6.5 9.5C10.2 8 13.8 8 17.5 9.5" stroke={cn(stroke ? stroke : "#141718")} strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M7.5 12C10.3 11.2 13.2 11.3 16 12.3" stroke={cn(stroke ? stroke : "#141718")} strokeWidth="1.25" strokeLinecap="round" />
+      <path d="M8.5 14.5C10.6 14.2 12.7 14.4 14.8 15.1" stroke={cn(stroke ? stroke : "#141718")} strokeWidth="1" strokeLinecap="round" />
+    </svg>
+  );
+};
+
+export const AppleMusicIcon: React.FC<SVGComponentProps> = ({ stroke, fill, className }) => {
+  return (
+    <svg
+      className={cn(className)}
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M15.5 2.5C14.5 3.6 13.9 5 14.1 6.4C15.5 6.6 16.9 6 18 5C17.4 3.7 16.6 2.9 15.5 2.5Z" fill={cn(fill ? fill : "#141718")} />
+      <path d="M12.5 7.5C11 7.5 9.8 8.3 9 9.6C8.3 10.6 8 11.7 8.1 12.9C8.2 14.3 8.9 15.5 10.1 16.3C11.1 17 12.4 17.2 13.6 16.9C14.4 16.7 15.2 16.2 15.7 15.5C16.6 14.3 16.7 12.7 16.2 11.4C15.7 10.1 14.6 9.1 13.2 8.7C13 8.6 12.8 8.6 12.5 8.6V7.5Z" fill={cn(fill ? fill : "#141718")} />
+    </svg>
+  );
+};

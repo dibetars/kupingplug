@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { generateSlug } from '@/lib/utils';
 
 interface ArtistLink {
   Name: string;
@@ -45,17 +46,25 @@ export default function EditArtistPage({
   const router = useRouter();
   const [artist, setArtist] = useState<Artist | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [bio, setBio] = useState('');
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [links, setLinks] = useState<ArtistLink[]>([]);
+  const [music, setMusic] = useState<MusicItem[]>([]);
 
   React.useEffect(() => {
     const fetchArtist = async () => {
       try {
-        const res = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:TF3YOouP/idrcrds/${params.id}`);
+        const res = await fetch(`/api/idrcrds/${params.id}`);
         if (!res.ok) throw new Error('Failed to fetch artist');
         const data = await res.json();
         setArtist(data);
-      } catch (error) {
-        console.error('Error fetching artist:', error);
-      }
+        setName(data.ArtistName || '');
+        setBio(data.bioM || '');
+        setPhotoUrl(data.Photo?.url || '');
+        setLinks(Array.isArray(data.links) ? data.links : []);
+        setMusic(Array.isArray(data.music) ? data.music : []);
+      } catch (error) {}
     };
 
     fetchArtist();
@@ -65,31 +74,64 @@ export default function EditArtistPage({
     e.preventDefault();
     setIsLoading(true);
 
-    const formData = new FormData(e.currentTarget);
     const updatedArtist = {
-      idrcrds_id: params.id,
-      ArtistName: formData.get('name') as string,
-      bioM: formData.get('bio') as string,
-      Photo: artist?.Photo || null,
-      links: artist?.links || [],
-      music: artist?.music || []
+      id: params.id,
+      ArtistName: name,
+      bioM: bio,
+      Photo: {
+        url: photoUrl || artist?.Photo?.url || '',
+        meta: artist?.Photo?.meta || { width: 1200, height: 800 },
+      },
+      links,
+      music,
     };
 
     try {
-      const res = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:TF3YOouP/idrcrds/${params.id}`, {
+      const res = await fetch(`/api/idrcrds/${params.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedArtist),
       });
-
       if (!res.ok) throw new Error('Failed to update artist');
-      
       router.push('/admin/artists');
     } catch (error) {
-      console.error('Error updating artist:', error);
       alert('Failed to update artist. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addLink = () => setLinks([...links, { Name: '', link: '' }]);
+  const updateLink = (idx: number, key: keyof ArtistLink, val: string) => {
+    const next = [...links];
+    (next[idx] as any)[key] = val;
+    setLinks(next);
+  };
+  const removeLink = (idx: number) => setLinks(links.filter((_, i) => i !== idx));
+
+  const addTrack = () => setMusic([...music, { name: '', link: '', image: { url: '', meta: { width: 1200, height: 800 } } }]);
+  const updateTrack = (idx: number, key: keyof MusicItem, val: any) => {
+    const next = [...music];
+    (next[idx] as any)[key] = val;
+    setMusic(next);
+  };
+  const updateTrackImageUrl = (idx: number, val: string) => {
+    const next = [...music];
+    next[idx].image = { url: val, meta: next[idx].image?.meta || { width: 1200, height: 800 } };
+    setMusic(next);
+  };
+  const removeTrack = (idx: number) => setMusic(music.filter((_, i) => i !== idx));
+
+  const onDelete = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`/api/idrcrds/${params.id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete artist');
+      router.push('/admin/artists');
+    } catch (error) {
+      alert('Failed to delete artist. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -121,9 +163,8 @@ export default function EditArtistPage({
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
-                defaultValue={artist.ArtistName}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffc95c] focus:ring-[#ffc95c] sm:text-sm"
               />
             </div>
@@ -134,10 +175,9 @@ export default function EditArtistPage({
                 Bio
               </label>
               <textarea
-                id="bio"
-                name="bio"
                 rows={4}
-                defaultValue={artist.bioM}
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffc95c] focus:ring-[#ffc95c] sm:text-sm"
               />
             </div>
@@ -156,12 +196,13 @@ export default function EditArtistPage({
                     className="object-cover"
                   />
                 </div>
-                <button
-                  type="button"
-                  className="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffc95c]"
-                >
-                  Change
-                </button>
+                <input
+                  type="text"
+                  value={photoUrl}
+                  onChange={(e) => setPhotoUrl(e.target.value)}
+                  placeholder="/artists/kingMidnight/kmavatar.png"
+                  className="ml-5 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffc95c] focus:ring-[#ffc95c] sm:text-sm"
+                />
               </div>
             </div>
 
@@ -171,22 +212,25 @@ export default function EditArtistPage({
                 Social Links
               </label>
               <div className="space-y-4">
-                {artist.links?.map((link, index) => (
+                {links.map((link, index) => (
                   <div key={index} className="flex gap-4">
                     <input
                       type="text"
                       placeholder="Platform Name"
-                      defaultValue={link.Name}
+                      value={link.Name}
+                      onChange={(e) => updateLink(index, 'Name', e.target.value)}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffc95c] focus:ring-[#ffc95c] sm:text-sm"
                     />
                     <input
                       type="url"
                       placeholder="Link URL"
-                      defaultValue={link.link}
+                      value={link.link}
+                      onChange={(e) => updateLink(index, 'link', e.target.value)}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffc95c] focus:ring-[#ffc95c] sm:text-sm"
                     />
                     <button
                       type="button"
+                      onClick={() => removeLink(index)}
                       className="text-red-600 hover:text-red-800"
                     >
                       Remove
@@ -195,6 +239,7 @@ export default function EditArtistPage({
                 ))}
                 <button
                   type="button"
+                  onClick={addLink}
                   className="text-[#ffc95c] hover:text-[#ffc95c]/80"
                 >
                   + Add Link
@@ -208,12 +253,12 @@ export default function EditArtistPage({
                 Music
               </label>
               <div className="space-y-4">
-                {artist.music?.map((item, index) => (
+                {music.map((item, index) => (
                   <div key={index} className="flex gap-4 items-center">
                     <div className="relative h-16 w-16 rounded-lg overflow-hidden">
                       <Image
-                        src={item.image.url}
-                        alt={item.name}
+                        src={item.image.url || '/placeholder-artist.jpg'}
+                        alt={item.name || 'Artwork'}
                         fill
                         className="object-cover"
                       />
@@ -221,17 +266,27 @@ export default function EditArtistPage({
                     <input
                       type="text"
                       placeholder="Track Name"
-                      defaultValue={item.name}
+                      value={item.name}
+                      onChange={(e) => updateTrack(index, 'name', e.target.value)}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffc95c] focus:ring-[#ffc95c] sm:text-sm"
                     />
                     <input
                       type="url"
                       placeholder="Streaming Link"
-                      defaultValue={item.link}
+                      value={item.link}
+                      onChange={(e) => updateTrack(index, 'link', e.target.value)}
+                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffc95c] focus:ring-[#ffc95c] sm:text-sm"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Artwork URL"
+                      value={item.image.url}
+                      onChange={(e) => updateTrackImageUrl(index, e.target.value)}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ffc95c] focus:ring-[#ffc95c] sm:text-sm"
                     />
                     <button
                       type="button"
+                      onClick={() => removeTrack(index)}
                       className="text-red-600 hover:text-red-800"
                     >
                       Remove
@@ -240,6 +295,7 @@ export default function EditArtistPage({
                 ))}
                 <button
                   type="button"
+                  onClick={addTrack}
                   className="text-[#ffc95c] hover:text-[#ffc95c]/80"
                 >
                   + Add Track
@@ -255,6 +311,14 @@ export default function EditArtistPage({
                 Cancel
               </Link>
               <button
+                type="button"
+                onClick={onDelete}
+                disabled={isLoading}
+                className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 disabled:opacity-50"
+              >
+                Delete Artist
+              </button>
+              <button
                 type="submit"
                 disabled={isLoading}
                 className="bg-[#ffc95c] hover:bg-[#ffc95c]/90 text-black py-2 px-4 rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffc95c] disabled:opacity-50"
@@ -267,4 +331,4 @@ export default function EditArtistPage({
       </div>
     </div>
   );
-} 
+}

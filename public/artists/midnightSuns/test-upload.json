@@ -1,0 +1,72 @@
+[
+  {
+    "id": "midnight-suns",
+    "ArtistName": "Midnight Suns",
+    "bioM": "Midnight Suns is a boundary-blurring musical duo of West African origin, formed by longtime collaborators Wes (Wesley Rhymes) and KingMidnight. United by a deep cultural bond and an insatiable hunger to push sound forward, they create genre-defying music that experiments boldly, blends effortlessly, and innovates fearlessly.\nRooted in heritage but unbound by tradition, Midnight Suns crafts immersive sonic landscapes that fuse soul-stirring vocals, textured production, and rhythms that pulse with global influence. Their sound bends categories—think alt-R&B meets electronic grit, poetic rap layered over hypnotic beats, and raw emotion delivered through rich, melodic storytelling.\nFrom the duality and vulnerability of “Two Parts,” to the high-voltage energy of “Dynamite,” to the atmospheric introspection of “W2M,” each track feels like a new chapter in a larger story: one of identity, evolution, and creative freedom.\nMore than just artists, Wes and KingMidnight are sonic architects—building bridges between continents, genres, and generations. Midnight Suns isn’t just music. It’s movement, mood, and message.",
+    "Photo": {
+      "url": "/artists/midnightSuns/midnightSunsArtwork.png",
+      "meta": { "width": 1200, "height": 800 }
+    },
+    "links": [
+      { "Name": "Instagram", "link": "#" },
+      { "Name": "Spotify", "link": "#" },
+      { "Name": "Apple Music", "link": "#" }
+    ],
+    "music": [
+      {
+        "name": "Get Comfortable",
+        "link": "#",
+        "image": {
+          "url": "/artists/midnightSuns/GetComfortableArtwork.png",
+          "meta": { "width": 1200, "height": 800 }
+        }
+      },
+      {
+        "name": "MidnightSuns Vol 1",
+        "link": "#",
+        "image": {
+          "url": "/artists/midnightSuns/midnightSunsArtwork.png",
+          "meta": {
+            "width": 1200,
+            "height": 800
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "king-midnight",
+    "ArtistName": "King Midnight",
+    "bioM": "KingMidnight is the melodic alchemist and sound-sculptor behind Midnight Suns, a visionary West African artist whose voice carries both vulnerability and power. As the duo’s primary vocalist, producer, and creative architect, KingMidnight brings depth, mood, and texture to every track—shaping their sonic identity with haunting melodies, layered harmonies, and bold, genre-bending production.\nHis sound floats between worlds—where R&B meets ambient soul, where electronic pulses merge with ancestral echoes. Whether he's delivering ethereal hooks, crafting atmospheric backdrops, or experimenting with unexpected sonic choices, KingMidnight is constantly pushing boundaries, chasing feeling over formula.\nDriven by intuition and innovation, his work reflects an artist unafraid to be fluid: blending the futuristic with the familiar, the sacred with the synthetic. In collaboration with Wes (Wesley Rhymes), he co-pilots Midnight Suns as a platform not just for music, but for movement—a reimagining of what it means to be an African artist in a global soundscape.\nKingMidnight is more than a singer or producer—he's a vibe engineer, channeling emotion into sound and crafting immersive experiences that linger long after the last note",
+    "Photo": {
+      "url": "/artists/kingMidnight/kmavatar.png",
+      "meta": { "width": 1200, "height": 800 }
+    },
+    "links": [
+      { "Name": "Instagram", "link": "#" }
+    ],
+    "music": [
+      {
+        "name": "Don't Run",
+        "link": "#",
+        "image": {
+          "url": "/artists/kingMidnight/Don'tRunArtwork.png",
+          "meta": { "width": 1200, "height": 800 }
+        }
+      }
+    ]
+  },
+  {
+    "id": "wesley-rhymes",
+    "ArtistName": "Wesley Rhymes",
+    "bioM": "Blake Bonsu is a Ghanaian-born, UK-raised singer and songwriter whose music blends soulful R&B, neo-soul warmth, and subtle Afro-fusion influences. His sound is defined by smooth vocals, intimate lyricism, and minimalist production that lets emotion take center stage.\nGrowing up between Ghana and the UK shaped Blake’s unique musical identity. In Britain, he absorbed the storytelling of contemporary R&B and the richness of soul, while his Ghanaian roots grounded his artistry in authenticity and cultural depth. Now based in Ghana, he channels both worlds into a sound that feels global yet deeply personal.\nBlake’s music often explores themes of identity, love, growth, and belonging — the quiet complexities of a life lived across continents. His reflective style and emotional honesty have become hallmarks of his work, offering listeners a sense of calm, clarity, and connection.\nWith each release, Blake Bonsu continues to carve out a thoughtful, resonant space in modern R&B, positioning himself as a refreshing voice bridging the Ghanaian and UK music landscapes.",
+    "Photo": {
+      "url": "/artists/gallery/images/Wes Wes.jpg",
+      "meta": { "width": 1200, "height": 800 }
+    },
+    "links": [
+      { "Name": "Instagram", "link": "#" }
+    ],
+    "music": []
+  }
+]

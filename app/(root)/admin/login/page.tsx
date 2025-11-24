@@ -12,14 +12,18 @@ export default function LoginPage() {
     const formData = new FormData(e.currentTarget);
     const username = formData.get('username') as string;
     const password = formData.get('password') as string;
-
-    if (username === 'admin' && password === '76541') {
-      // Set a session cookie
-      document.cookie = 'sessionToken=authenticated; path=/';
-      router.push('/admin/artists');
-    } else {
-      alert('Invalid credentials');
-    }
+    fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error('Invalid credentials');
+        router.push('/admin');
+      })
+      .catch(() => {
+        alert('Invalid credentials');
+      });
   };
 
   return (
@@ -98,4 +102,4 @@ export default function LoginPage() {
       </div>
     </div>
   );
-} 
+}

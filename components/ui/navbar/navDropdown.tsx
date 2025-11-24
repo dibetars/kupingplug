@@ -1,3 +1,4 @@
+'use client';
 // package
 import { useState } from "react";
 import Link from "next/link";
@@ -12,6 +13,9 @@ const NavDropdown = () => {
   const links = [
     { name: 'About', href: '/about' },
     { name: 'Artists', href: '/artist' },
+    { name: 'Gallery', href: '/gallery' },
+    { name: 'Services', href: '/services' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (

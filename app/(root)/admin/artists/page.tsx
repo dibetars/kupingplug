@@ -1,6 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import fs from 'fs/promises';
+import path from 'path';
 
 interface ArtistLink {
   Name: string;
@@ -36,17 +38,10 @@ interface Artist {
 
 async function getArtists(): Promise<Artist[]> {
   try {
-    const res = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:TF3YOouP/idrcrds', {
-      next: { revalidate: 3600 }
-    });
-    
-    if (!res.ok) {
-      throw new Error('Failed to fetch artists');
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error('Error fetching artists:', error);
+    const filePath = path.join(process.cwd(), 'data', 'idrcrds.json');
+    const data = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch {
     return [];
   }
 }
@@ -142,4 +137,4 @@ export default async function AdminArtistsPage() {
       </div>
     </div>
   );
-} 
+}

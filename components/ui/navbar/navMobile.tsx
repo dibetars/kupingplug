@@ -19,22 +19,11 @@ import {
 import { cn } from "@/lib/utils";
 
 const links = [
- 
-  {
-    id: "shop",
-    path: "/shop",
-    name: "Shop",
-  },
-  {
-    id: "product",
-    path: "/product",
-    name: "Product",
-  },
-  {
-    id: "contact-us",
-    path: "/contact-us",
-    name: "Contact Us",
-  },
+  { id: "about", path: "/about", name: "About" },
+  { id: "artists", path: "/artist", name: "Artists" },
+  { id: "gallery", path: "/gallery", name: "Gallery" },
+  { id: "services", path: "/services", name: "Services" },
+  { id: "contact", path: "/contact", name: "Contact" },
 ];
 
 export default function NavMobile({

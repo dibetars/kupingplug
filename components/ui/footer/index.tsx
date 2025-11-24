@@ -11,6 +11,9 @@ import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/ui/assets/svg";
 const links = [
   { name: 'About', href: '/about' },
   { name: 'Artists', href: '/artist' },
+  { name: 'Gallery', href: '/gallery' },
+  { name: 'Services', href: '/services' },
+  { name: 'Contact', href: '/contact' },
 ];
 
 const Footer = () => {

@@ -57,12 +57,10 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="hidden lg:flex flex-1 justify-center">
-          <NavLinks />
-        </div>
+        <div className="flex-1" />
 
-        <div className="w-[50px] lg:w-auto">
-          {/* Spacer div to maintain centering */}
+        <div className="hidden lg:flex">
+          <NavLinks />
         </div>
 
         {/* mobile navbar */}

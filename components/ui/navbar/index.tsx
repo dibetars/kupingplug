@@ -43,9 +43,6 @@ const Navbar = () => {
     >
       <nav className="container mx-auto flex items-center justify-between px-4 py-4">
         <div className="flex items-center gap-4">
-          <div className="lg:hidden">
-            <NavDropdown />
-          </div>
           <Link href="/" className="flex items-center">
             <Image
               src="/IDSolo.jpg"
@@ -59,8 +56,13 @@ const Navbar = () => {
 
         <div className="flex-1" />
 
-        <div className="hidden lg:flex">
-          <NavLinks />
+        <div className="flex items-center gap-4">
+          <div className="lg:hidden">
+            <NavDropdown />
+          </div>
+          <div className="hidden lg:flex">
+            <NavLinks />
+          </div>
         </div>
 
         {/* mobile navbar */}
